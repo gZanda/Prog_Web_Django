@@ -20,5 +20,6 @@ python3 manage.py runserver
 
 ```bash
 pip install django
+
 pip install psycopg2-binary
 ```
