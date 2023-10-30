@@ -1,12 +1,12 @@
 # 📜 Como executar o projeto
 
-# 📌 Ative o ambiente virtual
+### 📌 Ative o ambiente virtual
 
 ```bash
 . .venv/bin/activate
 ```
 
-# 📌 Vá para o diretório do do projeto e rode o servidor
+### 📌 Vá para o diretório do do projeto e rode o servidor
 
 ```bash
 cd taskies
@@ -14,7 +14,7 @@ cd taskies
 python3 manage.py runserver
 ```
 
-# 📌 Caso tenha problemas de dependências:
+### 📌 Caso tenha problemas de dependências:
 
 -   Ative o ambiente virtual e use o pip para instalar
 
