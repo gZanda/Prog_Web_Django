@@ -1,0 +1,21 @@
+# Use the official Python image as the base image
+FROM python:3.10
+
+# Set environment variables
+ENV PYTHONUNBUFFERED 1
+ENV DJANGO_SETTINGS_MODULE taskies.settings
+
+# Create and set the working directory in the container
+WORKDIR /app
+
+# Copy your Django project into the container
+COPY . /app
+
+# Install any additional dependencies you need
+RUN pip install -r requirements.txt
+
+# Expose the port your Django app will run on
+EXPOSE 8000
+
+# Start your Django application
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
