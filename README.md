@@ -1,20 +1,12 @@
-# 📜 Como executar o projeto
+# 📜 Como executar localmente
 
-### 📌 Ative o ambiente virtual
+### 📌 Ative o ambiente virtual:
 
 ```bash
 . .venv/bin/activate
 ```
 
-### 📌 Vá para o diretório do do projeto e rode o servidor
-
-```bash
-cd taskies
-
-python3 manage.py runserver
-```
-
-### 📌 Caso tenha problemas de dependências:
+### 📌 Instale as dependências:
 
 -   Ative o ambiente virtual e use o pip para instalar
 
@@ -23,3 +15,12 @@ pip install django
 
 pip install psycopg2-binary
 ```
+
+### 📌 Vá para o diretório da aplicação e rode o servidor:
+
+```bash
+cd taskies
+
+python3 manage.py runserver
+```
+
