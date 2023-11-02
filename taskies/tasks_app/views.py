@@ -1,10 +1,14 @@
-from django.http import HttpResponse
-from django.template import loader
+# Views: Functions that handle the request and return a response
 
-def home(request):
-    template = loader.get_template('home.html')
-    return HttpResponse(template.render())
+from .serializers import TaskSerializer, UserSerializer
+from .models import Task, User
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
-def login(request):
-    template = loader.get_template('login.html')
-    return HttpResponse(template.render())
+# GET ALL USERS
+@api_view(['GET'])
+def getTasks(request):
+    tasks = Task.objects.all()                                      # Get all tasks from the database
+    serializer = TaskSerializer(tasks, many=True)                   # Convert the tasks to JSON
+    return Response(serializer.data, status=status.HTTP_200_OK)     # Return the JSON
