@@ -8,4 +8,6 @@ urlpatterns = [
     path('users/<int:id>/', views.getUserById, name='userById'), # GET ONE USER BY ID
     path('postTask/', views.postTask, name='postTask'), # POST TASK
     path('postUser/', views.postUser, name='postUser'), # POST USER
+    path('deleteTask/<int:id>/', views.deleteTaskById, name='deleteTaskById'), # DELETE TASK BY ID
+    path('deleteUser/<int:id>/', views.deleteUserById, name='deleteUserById'), # DELETE USER BY ID
 ]

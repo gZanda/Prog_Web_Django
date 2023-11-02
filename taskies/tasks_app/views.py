@@ -58,3 +58,23 @@ def postUser(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(status=status.HTTP_400_BAD_REQUEST)
+
+# DELETE TASK BY ID - Receives id via URL
+@api_view(['DELETE'])
+def deleteTaskById(request, id):
+    try:
+        task = Task.objects.get(id=id)
+        task.delete()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+# DELETE USER BY ID - Receives id via URL
+@api_view(['DELETE'])
+def deleteUserById(request, id):
+    try:
+        user = User.objects.get(id=id)
+        user.delete()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
