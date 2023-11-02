@@ -20,7 +20,7 @@ def getUsers(request):
     serializer = UserSerializer(users, many=True)                   
     return Response(serializer.data, status=status.HTTP_200_OK)     
 
-# GET ONE TASK BY ID - Receives the id as a parameter by the URL
+# GET ONE TASK BY ID - Receives id via URL
 @api_view(['GET'])
 def getTaskById(request, id):
     try:
@@ -30,7 +30,7 @@ def getTaskById(request, id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
-# GET ONE USER BY ID - Receives the id as a parameter by the URL
+# GET ONE USER BY ID - Receives id via URL
 @api_view(['GET'])
 def getUserById(request, id):
     try:
@@ -39,3 +39,22 @@ def getUserById(request, id):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+    
+# POST TASK
+@api_view(['POST'])
+def postTask(request):
+    serializer = TaskSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# POST USER
+@api_view(['POST'])
+def postUser(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
