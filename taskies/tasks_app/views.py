@@ -20,7 +20,7 @@ def getUsers(request):
     serializer = UserSerializer(users, many=True)                   
     return Response(serializer.data, status=status.HTTP_200_OK)     
 
-# GET ONE TASK BY ID - Receives id via URL
+# GET ONE TASK BY ID
 @api_view(['GET'])
 def getTaskById(request, id):
     try:
@@ -30,7 +30,7 @@ def getTaskById(request, id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
-# GET ONE USER BY ID - Receives id via URL
+# GET ONE USER BY ID 
 @api_view(['GET'])
 def getUserById(request, id):
     try:
@@ -59,7 +59,7 @@ def postUser(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-# DELETE TASK BY ID - Receives id via URL
+# DELETE TASK BY ID 
 @api_view(['DELETE'])
 def deleteTaskById(request, id):
     try:
@@ -69,12 +69,36 @@ def deleteTaskById(request, id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
-# DELETE USER BY ID - Receives id via URL
+# DELETE USER BY ID 
 @api_view(['DELETE'])
 def deleteUserById(request, id):
     try:
         user = User.objects.get(id=id)
         user.delete()
         return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+# PUT TASK BY ID 
+@api_view(['PUT'])
+def putTaskById(request, id):
+    try:
+        task = Task.objects.get(id=id)
+        serializer = TaskSerializer(instance=task, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+# PUT USER BY ID
+@api_view(['PUT'])
+def putUserById(request, id):
+    try:
+        user = User.objects.get(id=id)
+        serializer = UserSerializer(instance=user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
