@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',   # Rest Dependency 
     'tasks_app',        # Our App
+    'corsheaders',      # CORS Dependency
 ]
 
 MIDDLEWARE = [
@@ -48,7 +49,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # CORS Middleware 
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True # CORS Middleware
 
 ROOT_URLCONF = 'taskies.urls'
 
