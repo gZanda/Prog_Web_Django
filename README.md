@@ -8,7 +8,7 @@
 
 ### 📌 Instale as dependências:
 
--   Ative o ambiente virtual e use o pip para instalar
+-   Ative o ambiente virtual e use o pip para instalar:
 
 ```bash
 pip install django
@@ -16,6 +16,8 @@ pip install django
 pip install djangorestframework 
 
 pip install psycopg2-binary
+
+pip install django-cors-headers 
 ```
 
 ### 📌 Vá para o diretório da aplicação e rode o servidor:
@@ -25,4 +27,3 @@ cd taskies
 
 python3 manage.py runserver
 ```
-
