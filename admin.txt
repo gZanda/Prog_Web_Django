@@ -1,2 +1,11 @@
+email: masterAdmin@email.com
 user: masterAdmin
 password: 789456123
+
+
+{
+  "email": "teste@email.com",
+  "username" : "teste",
+  "password": "teste123",
+  "role": "Manager"
+}

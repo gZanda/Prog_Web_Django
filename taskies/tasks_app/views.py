@@ -1,8 +1,12 @@
 # Views: Functions that handle the request and return a response
 
-from .serializers import TaskSerializer, UserSerializer
+from .serializers import TaskSerializer, UserSerializer, UserRegisterSerializer, UserLoginSerializer
 from .models import Task, User
-from rest_framework.decorators import api_view
+from .validations import custom_validation, validate_email, validate_password
+from django.contrib.auth import login, logout
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -102,3 +106,42 @@ def putUserById(request, id):
             return Response(serializer.data, status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def register(request):
+    clean_data = custom_validation(request.data)
+    serializer = UserRegisterSerializer(data = clean_data)
+    if serializer.is_valid(raise_exception= True):
+        user = serializer.create(clean_data)
+        if user:
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+    return Response(status = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication])
+@permission_classes([AllowAny])
+def user_login(request):
+    data = request.data
+    assert validate_email(data)
+    assert validate_password(data)
+    serializer = UserLoginSerializer(data=data)
+    if serializer.is_valid(raise_exception=True):
+        user = serializer.check_user(data)
+        login(request, user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def user_logout(request):
+    logout(request)
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def user(request):
+    serializer = UserSerializer(request.user)
+    return Response({'user': serializer.data}, status=status.HTTP_200_OK)
