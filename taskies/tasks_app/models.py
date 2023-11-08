@@ -1,11 +1,27 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class User(models.Model):
+class User(AbstractUser):
     # PK autoincrement
     id = models.AutoField(primary_key=True)
     
-    # Name
-    name = models.CharField(max_length=100)
+    username = models.CharField(max_length=30, unique=True)
+
+    # first_name - Default - Optional
+    
+    # last_name - Default - Optional
+    
+    # email - Default - Optional
+    
+    # password - Default - Needed
+    
+    # is_staff - Default - Automatically created
+     
+    # is_active - Default - Automatically created
+    
+    # date_joined - Default - Automatically created
+
+    # is_superuser - Default - Automatically created
     
     # Role ( ENUM )
     WORKER = 'Worker'
@@ -16,8 +32,11 @@ class User(models.Model):
     ]
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
+    # Username is the field for authentication 
+    USERNAME_FIELD = 'username'
+
     def __str__(self):
-        return self.name
+        return self.username
 
 class Task(models.Model):
     # PK autoincrement

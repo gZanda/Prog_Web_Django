@@ -52,6 +52,12 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', # CORS Middleware 
 ]
 
+AUTH_USER_MODEL = 'tasks_app.User' # Custom User Model
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 CORS_ALLOW_ALL_ORIGINS = True # CORS Middleware
 
 ROOT_URLCONF = 'taskies.urls'

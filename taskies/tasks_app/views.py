@@ -1,10 +1,13 @@
 # Views: Functions that handle the request and return a response
 
-from .serializers import TaskSerializer, UserSerializer
+from django.contrib.auth.hashers import make_password
+from .serializers import TaskSerializer, UserSerializer, UserLoginSerializer
 from .models import Task, User
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import AllowAny
+from django.contrib.auth import authenticate, login
 
 # GET ALL TASKS
 @api_view(['GET'])  
@@ -102,3 +105,33 @@ def putUserById(request, id):
             return Response(serializer.data, status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+    
+# Better Create User     
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def userRegistration(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        # Hash the password before saving
+        password = make_password(serializer.validated_data['password'])
+        serializer.save(password=password)  # Set the hashed password
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Make a login function that will receive the username and password and return the user id
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def userLogin(request):
+    serializer = UserLoginSerializer(data=request.data)
+    if serializer.is_valid():
+        username = serializer.validated_data['username']
+        password = serializer.validated_data['password']
+        print(f'Username: {username}, Password: {password}')
+        user = authenticate(request, username=username, password=password)
+        print(user)
+        if user is not None:
+            login(request, user)
+            return Response({'user_id': user.id}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Authentication failed'}, status=status.HTTP_401_UNAUTHORIZED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

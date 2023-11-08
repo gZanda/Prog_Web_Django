@@ -12,4 +12,6 @@ urlpatterns = [
     path('deleteUser/<int:id>/', views.deleteUserById, name='deleteUserById'), # DELETE USER 
     path('putTask/<int:id>/', views.putTaskById, name='putTaskById'), # UPDATE TASK 
     path('putUser/<int:id>/', views.putUserById, name='putUserById'), # UPDATE USER 
+    path('betterCreateUser/', views.userRegistration, name='userRegistration'), # BETTER CREATE USER
+    path('betterUserLogin/', views.userLogin, name='userLogin'), # BETTER USER LOGIN
 ]
