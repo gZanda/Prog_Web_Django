@@ -1,2 +1,23 @@
 user: masterAdmin
 password: 789456123
+
+Teste de Criação de Usuário:
+{
+    "username": "Zanda",
+    "password": "123456",
+    "role": "Manager"
+}
+
+Teste de Login Usuário:
+{
+    "username": "Zanda",
+    "password": "123456"
+}
+
+Teste Criação de Task:
+{
+    "description":"Fazer trabalho",
+    "status":"Pendente",
+    "approval_status":"Não Avaliada",
+    "responsible": 4
+}
