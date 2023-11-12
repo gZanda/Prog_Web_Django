@@ -12,9 +12,10 @@ class TaskSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username','password','role')
+        fields = ('id', 'username','email','password','role')
         extra_kwargs = {'password': {'write_only': True}}
 
 class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    # Email and password are required for login
+    email = serializers.EmailField()
     password = serializers.CharField(write_only=True)

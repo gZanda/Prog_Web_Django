@@ -118,17 +118,16 @@ def userRegistration(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Make a login function that will receive the username and password and return the user id
+# Make a login function that will receive the email and password and return the user id
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def userLogin(request):
     serializer = UserLoginSerializer(data=request.data)
     if serializer.is_valid():
-        username = serializer.validated_data['username']
+        email = serializer.validated_data['email']
         password = serializer.validated_data['password']
-        print(f'Username: {username}, Password: {password}')
-        user = authenticate(request, username=username, password=password)
-        print(user)
+        print(f'email: {email}, Password: {password}')
+        user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
             return Response({'user_id': user.id}, status=status.HTTP_200_OK)

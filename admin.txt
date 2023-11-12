@@ -4,14 +4,15 @@ password: 789456123
 Teste de Criação de Usuário:
 {
     "username": "Zanda",
-    "password": "123456",
+    "email": "zanda@gmail.com",
+    "password": "123",
     "role": "Manager"
 }
 
 Teste de Login Usuário:
 {
-    "username": "Zanda",
-    "password": "123456"
+    "email": "zanda@gmail.com",
+    "password": "123"
 }
 
 Teste Criação de Task:

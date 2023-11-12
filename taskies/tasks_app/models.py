@@ -6,22 +6,10 @@ class User(AbstractUser):
     id = models.AutoField(primary_key=True)
     
     username = models.CharField(max_length=30, unique=True)
-
-    # first_name - Default - Optional
     
-    # last_name - Default - Optional
+    email = models.EmailField(max_length=254, unique=True)
     
-    # email - Default - Optional
-    
-    # password - Default - Needed
-    
-    # is_staff - Default - Automatically created
-     
-    # is_active - Default - Automatically created
-    
-    # date_joined - Default - Automatically created
-
-    # is_superuser - Default - Automatically created
+    # password - Comes by default - Needed for authentication
     
     # Role ( ENUM )
     WORKER = 'Worker'
@@ -32,8 +20,11 @@ class User(AbstractUser):
     ]
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
-    # Username is the field for authentication 
-    USERNAME_FIELD = 'username'
+    # email is the field for autheentication
+    USERNAME_FIELD = 'email'
+
+    # Required fields
+    REQUIRED_FIELDS = ['username','role']
 
     def __str__(self):
         return self.username
