@@ -18,6 +18,8 @@ pip install djangorestframework
 pip install psycopg2-binary
 
 pip install django-cors-headers 
+
+pip install pika
 ```
 
 ### 📌 Vá para o diretório da aplicação e rode o servidor:
