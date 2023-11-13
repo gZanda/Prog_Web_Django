@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',   # Rest Dependency 
     'tasks_app',        # Our App
     'corsheaders',      # CORS Dependency
+    'rest_framework.authtoken', # Token Authentication
 ]
 
 MIDDLEWARE = [

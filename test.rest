@@ -1,0 +1,43 @@
+# Essa file é apenas para testar os requests com token usando a extensão "REST" do VSCode
+# User é criado ou faz login -> Novo Token é gerado
+# User faz logout -> Token é deletado
+
+# Create User with Token
+POST http://127.0.0.1:8000/tokenSignin/
+Content-Type: application/json
+
+{
+    "username": "Zanda3",
+    "email": "zanda3@gmail.com",
+    "password": "123",
+    "role": "Worker"
+}
+
+###
+
+# Login User with Token
+POST http://127.0.0.1:8000/tokenLogin/
+Content-Type: application/json
+
+{
+    "email": "zanda3@gmail.com",
+    "password": "123"
+}
+
+###
+
+# Test user token authentication
+GET http://127.0.0.1:8000/tokenTest/
+Content-Type: application/json
+Authorization: Token c74e775c459019edf50fd573dcc632b7a2083b86
+
+{}
+
+###
+
+# Logout user
+GET http://127.0.0.1:8000/tokenLogout/
+Content-Type: application/json
+Authorization: Token c74e775c459019edf50fd573dcc632b7a2083b86
+
+{}

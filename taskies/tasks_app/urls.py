@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
@@ -14,5 +14,10 @@ urlpatterns = [
     path('login/', views.userLogin, name='userLogin'),                          # Login User
     path('editUser/<int:id>/', views.putUserById, name='putUserById'),          # Update User
     path('deleteUser/<int:id>/', views.deleteUserById, name='deleteUserById'),  # Delete User
+
+    re_path('tokenLogin/' , views.login),
+    re_path('tokenSignin/' , views.signin),
+    re_path('tokenTest/' , views.test),
+    re_path('tokenLogout/' , views.logout),
     
 ]
