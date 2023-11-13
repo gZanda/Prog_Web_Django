@@ -9,21 +9,14 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate, login
 
-# GET ALL TASKS
+# Get all Tasks
 @api_view(['GET'])  
 def getTasks(request):
     tasks = Task.objects.all()                                      
     serializer = TaskSerializer(tasks, many=True)                   
-    return Response(serializer.data, status=status.HTTP_200_OK)     
+    return Response(serializer.data, status=status.HTTP_200_OK)         
 
-# GET ALL USERS
-@api_view(['GET'])
-def getUsers(request):
-    users = User.objects.all()                                      
-    serializer = UserSerializer(users, many=True)                   
-    return Response(serializer.data, status=status.HTTP_200_OK)     
-
-# GET ONE TASK BY ID
+# Get one Task by id
 @api_view(['GET'])
 def getTaskById(request, id):
     try:
@@ -33,17 +26,7 @@ def getTaskById(request, id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
-# GET ONE USER BY ID 
-@api_view(['GET'])
-def getUserById(request, id):
-    try:
-        user = User.objects.get(id=id)
-        serializer = UserSerializer(user, many=False)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-# POST TASK
+# Create Task
 @api_view(['POST'])
 def postTask(request):
     serializer = TaskSerializer(data=request.data)
@@ -52,17 +35,7 @@ def postTask(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
-# POST USER
-@api_view(['POST'])
-def postUser(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
-
-# DELETE TASK BY ID 
+# Delete Task by id
 @api_view(['DELETE'])
 def deleteTaskById(request, id):
     try:
@@ -72,17 +45,7 @@ def deleteTaskById(request, id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
-# DELETE USER BY ID 
-@api_view(['DELETE'])
-def deleteUserById(request, id):
-    try:
-        user = User.objects.get(id=id)
-        user.delete()
-        return Response(status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-# PUT TASK BY ID 
+# Edit Task by id
 @api_view(['PUT'])
 def putTaskById(request, id):
     try:
@@ -94,7 +57,34 @@ def putTaskById(request, id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
-# PUT USER BY ID
+# Get all Users
+@api_view(['GET'])
+def getUsers(request):
+    users = User.objects.all()                                      
+    serializer = UserSerializer(users, many=True)                   
+    return Response(serializer.data, status=status.HTTP_200_OK) 
+
+# Get one User by id
+@api_view(['GET'])
+def getUserById(request, id):
+    try:
+        user = User.objects.get(id=id)
+        serializer = UserSerializer(user, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+# Delete User by id
+@api_view(['DELETE'])
+def deleteUserById(request, id):
+    try:
+        user = User.objects.get(id=id)
+        user.delete()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+# Edit User by id
 @api_view(['PUT'])
 def putUserById(request, id):
     try:
@@ -106,7 +96,7 @@ def putUserById(request, id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
-# Better Create User     
+# Create User    
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def userRegistration(request):
@@ -118,7 +108,7 @@ def userRegistration(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Make a login function that will receive the email and password and return the user id
+# Login User
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def userLogin(request):
@@ -126,7 +116,7 @@ def userLogin(request):
     if serializer.is_valid():
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
-        print(f'email: {email}, Password: {password}')
+        print(f'email: {email} Password: {password}')
         user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)

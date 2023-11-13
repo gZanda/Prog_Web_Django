@@ -34,7 +34,7 @@ class Task(models.Model):
     id = models.AutoField(primary_key=True)
 
     # Description
-    description = models.CharField(max_length=100)
+    description = models.CharField(max_length=300)
 
     # Status (ENUM)
     PENDENTE = 'Pendente'
@@ -43,7 +43,7 @@ class Task(models.Model):
         (PENDENTE, 'Pendente'),
         (PRONTA, 'Pronta'),
     ]
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=PENDENTE)
 
     # Approval_Status (ENUM)
     APROVADA = 'Aprovada'
@@ -54,7 +54,7 @@ class Task(models.Model):
         (REJEITADA, 'Rejeitada'),
         (NAO_AVALIADA, 'Não Avaliada'),
     ]
-    approval_status = models.CharField(max_length=15, choices=APPROVAL_STATUS_CHOICES)
+    approval_status = models.CharField(max_length=15, choices=APPROVAL_STATUS_CHOICES, default=NAO_AVALIADA)
 
     # Foreign Key -> Relate to User id
     responsible = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
