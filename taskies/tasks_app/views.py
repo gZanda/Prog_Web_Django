@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate, login
+from jobs.sender import send_to_queue
 
 # Get all Tasks
 @api_view(['GET'])  
@@ -103,8 +104,11 @@ def userRegistration(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         # Hash the password before saving
+        email = serializer.validated_data['email']
         password = make_password(serializer.validated_data['password'])
         serializer.save(password=password)  # Set the hashed password
+        print(email)
+        send_to_queue(email)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
