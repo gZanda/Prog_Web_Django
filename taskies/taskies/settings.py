@@ -53,11 +53,14 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', # CORS Middleware 
 ]
 
-AUTH_USER_MODEL = 'tasks_app.User' # Custom User Model
+# Setting Rest framework authentication to Token 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
+AUTH_USER_MODEL = 'tasks_app.User' # Out Custom User Model
 
 CORS_ALLOW_ALL_ORIGINS = True # CORS Middleware
 

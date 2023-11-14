@@ -10,14 +10,12 @@ urlpatterns = [
 
     path('users/', views.getUsers, name='users'),                               # Get All Users
     path('users/<int:id>/', views.getUserById, name='userById'),                # Get one User
-    path('signin/', views.userRegistration, name='userRegistration'),           # Create User
-    path('login/', views.userLogin, name='userLogin'),                          # Login User
     path('editUser/<int:id>/', views.putUserById, name='putUserById'),          # Update User
     path('deleteUser/<int:id>/', views.deleteUserById, name='deleteUserById'),  # Delete User
 
-    re_path('tokenLogin/' , views.login),
-    re_path('tokenSignin/' , views.signin),
-    re_path('tokenTest/' , views.test),
-    re_path('tokenLogout/' , views.logout),
+    re_path('userLogin/' , views.login),
+    re_path('userSignin/' , views.signin),
+    re_path('userTest/' , views.test),
+    re_path('userLogout/' , views.logout),
     
 ]
