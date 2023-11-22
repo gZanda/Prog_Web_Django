@@ -142,3 +142,23 @@ def test(request):
 def logout(request):
     request.user.auth_token.delete() # Delete user token
     return Response("{} Logged out".format(request.user.email),status=status.HTTP_200_OK) 
+
+# Get all tasks related to a user by his id that comes on token
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def allUserTasks(request):
+    # Check if User is from role "Worker"
+    if request.user.role == "Manager":
+        try:
+            # Get the user id from token
+            id = request.user.id
+            print("User id on token: ", id)
+            user = User.objects.get(id=id)
+            tasks = Task.objects.filter(responsible=user)
+            serializer = TaskSerializer(tasks, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)

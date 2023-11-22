@@ -7,10 +7,10 @@ POST http://127.0.0.1:8000/userSignin/
 Content-Type: application/json
 
 {
-    "username": "Zanda3",
-    "email": "zanda3@gmail.com",
+    "username": "ZandaManager",
+    "email": "zandaManager@gmail.com",
     "password": "123",
-    "role": "Worker"
+    "role": "Manager"
 }
 
 ###
@@ -20,7 +20,7 @@ POST http://127.0.0.1:8000/userLogin/
 Content-Type: application/json
 
 {
-    "email": "zanda3@gmail.com",
+    "email": "zandaManager@gmail.com",
     "password": "123"
 }
 
@@ -29,7 +29,7 @@ Content-Type: application/json
 # Test user token authentication
 GET http://127.0.0.1:8000/userTest/
 Content-Type: application/json
-Authorization: Token f9cb5d432e62de9bb3e1ffd2076db5f2abf986c9
+Authorization: Token 08be12f8eb94bcc1f3c4a3a608fc431f0ced82de
 
 {}
 
@@ -38,6 +38,29 @@ Authorization: Token f9cb5d432e62de9bb3e1ffd2076db5f2abf986c9
 # Logout user
 GET http://127.0.0.1:8000/userLogout/
 Content-Type: application/json
-Authorization: Token f9cb5d432e62de9bb3e1ffd2076db5f2abf986c9
+Authorization: Token 08be12f8eb94bcc1f3c4a3a608fc431f0ced82de
 
 {}
+
+### 
+
+# Get all user Tasks
+GET http://127.0.0.1:8000/allUserTasks/
+Content-Type: application/json
+Authorization: Token 08be12f8eb94bcc1f3c4a3a608fc431f0ced82de
+
+{}
+
+###
+
+#Create task
+POST http://127.0.0.1:8000/createTask/
+Content-Type: application/json
+Authorization: Token 08be12f8eb94bcc1f3c4a3a608fc431f0ced82de
+
+{
+    "description":"Fazer outro Trabalho",
+    "status":"Pendente",
+    "approval_status":"Não Avaliada",
+    "responsible": 3
+}
