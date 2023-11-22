@@ -10,7 +10,6 @@ urlpatterns = [
 
     path('users/', views.getUsers, name='users'),                               # Get All Users
     path('users/<int:id>/', views.getUserById, name='userById'),                # Get one User
-    path('editUser/<int:id>/', views.putUserById, name='putUserById'),          # Update User
     path('deleteUser/<int:id>/', views.deleteUserById, name='deleteUserById'),  # Delete User
 
     re_path('userLogin/' , views.login),

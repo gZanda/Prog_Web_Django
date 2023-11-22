@@ -13,33 +13,6 @@ from django.shortcuts import get_object_or_404
 # Authentication imports
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated       
-    
-# Edit User by id
-@api_view(['PUT'])
-def putUserById(request, id):
-    try:
-        user = User.objects.get(id=id)
-        serializer = UserSerializer(instance=user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-# User Signin (no token here )
-@api_view(['POST'])
-def signin(request):
-    serializer = UserSerializer(data=request.data) # Serialize user
-    if serializer.is_valid():                       # Check if user json data is valid
-        email = serializer.validated_data['email']  # Validate email
-        password = make_password(serializer.validated_data['password'])     # Hash the password before saving
-        serializer.save(password=password)  # Save the hashed password
-        print(email)
-        send_to_queue(email) # Send email using Rabit
-        return Response(serializer.data, status=status.HTTP_201_CREATED) # Return token and user
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) # If user is not valid
-
-# Token related --------------------------------------------------------------------------------------------
 
 # User Token Test
 @api_view(['GET'])
@@ -47,6 +20,24 @@ def signin(request):
 @permission_classes([IsAuthenticated]) # Check if user is authenticated
 def test(request):
     return Response("Valid token for {}".format(request.user.email))
+
+# User Signin -> Only Managers
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication]) # Check if token is valid
+@permission_classes([IsAuthenticated]) # Check if user is authenticated
+def signin(request):
+    if request.user.role == "Manager": # Check if user is a manager
+        serializer = UserSerializer(data=request.data) # Serialize user
+        if serializer.is_valid():                       # Check if user json data is valid
+            email = serializer.validated_data['email']  # Validate email
+            password = make_password(serializer.validated_data['password'])     # Hash the password before saving
+            serializer.save(password=password)  # Save the hashed password
+            print(email)
+            send_to_queue(email) # Send email using Rabit
+            return Response(serializer.data, status=status.HTTP_201_CREATED) # Return user info
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) # If user is not valid
+    else:
+        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
 
 # User Login with Token -> All users
 @api_view(['POST'])
