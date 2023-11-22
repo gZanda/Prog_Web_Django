@@ -20,7 +20,7 @@ POST http://127.0.0.1:8000/userLogin/
 Content-Type: application/json
 
 {
-    "email": "zandaManager@gmail.com",
+    "email": "zandaWorker@gmail.com",
     "password": "123"
 }
 
@@ -29,7 +29,7 @@ Content-Type: application/json
 # Test user token authentication
 GET http://127.0.0.1:8000/userTest/
 Content-Type: application/json
-Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
 
 ###
 
@@ -43,21 +43,21 @@ Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 # Get All Tasks
 GET http://127.0.0.1:8000/tasks/
 Content-Type: application/json
-Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
 
 ###
 
 # Get all his Tasks
 GET http://127.0.0.1:8000/userTasks/
 Content-Type: application/json
-Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
 
 ###
 
 #Create task
 POST http://127.0.0.1:8000/createTask/
 Content-Type: application/json
-Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
 
 {
     "description":"Fazer Trabalho de Manager",
@@ -69,6 +69,13 @@ Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 ###
 
 # Delete Task
-DELETE http://127.0.0.1:8000/deleteTask/4/
+DELETE http://127.0.0.1:8000/deleteTask/2/
 Content-Type: application/json
-Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
+
+###
+
+# Get one Task by id
+GET http://127.0.0.1:8000/tasks/2/
+Content-Type: application/json
+Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7

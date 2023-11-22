@@ -13,16 +13,6 @@ from django.shortcuts import get_object_or_404
 # Authentication imports
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated       
-
-# Get one Task by id
-@api_view(['GET'])
-def getTaskById(request, id):
-    try:
-        task = Task.objects.get(id=id)
-        serializer = TaskSerializer(task, many=False)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
     
 # Edit Task by id
 @api_view(['PUT'])
@@ -77,16 +67,6 @@ def putUserById(request, id):
 
 # Token related --------------------------------------------------------------------------------------------
 
-# User Login with Token -> All users
-@api_view(['POST'])
-def login(request):
-    user = get_object_or_404(User, email=request.data['email']) # Get user by email
-    if not user.check_password(request.data['password']):       # Check password
-        return Response({'detail': 'Authentication failed'}, status=status.HTTP_401_UNAUTHORIZED)   # if password is wrong
-    token, created = Token.objects.get_or_create(user=user)     # Get Token or Recreate Token
-    serializer = UserSerializer(instance=user)             # Serialize user
-    return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_200_OK) # Return token and user
-
 # User Signin (no token here )-> 
 @api_view(['POST'])
 def signin(request):
@@ -100,12 +80,22 @@ def signin(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED) # Return token and user
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) # If user is not valid
 
-# User token validation test
+# User Token Test
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication]) # Check if token is valid
 @permission_classes([IsAuthenticated]) # Check if user is authenticated
 def test(request):
     return Response("Valid token for {}".format(request.user.email))
+
+# User Login with Token -> All users
+@api_view(['POST'])
+def login(request):
+    user = get_object_or_404(User, email=request.data['email']) # Get user by email
+    if not user.check_password(request.data['password']):       # Check password
+        return Response({'detail': 'Authentication failed'}, status=status.HTTP_401_UNAUTHORIZED)   # if password is wrong
+    token, created = Token.objects.get_or_create(user=user)     # Get Token or Recreate Token
+    serializer = UserSerializer(instance=user)             # Serialize user
+    return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_200_OK) # Return token and user
 
 # User logout with Token -> All users
 @api_view(['GET'])
@@ -174,3 +164,23 @@ def deleteTaskById(request, id):
             return Response("Task not Found",status=status.HTTP_404_NOT_FOUND)
     else:
         return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+    
+# Get one Task by id -> All Users (Managers can see all, Workers can see only theirs)
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getTaskById(request, id):
+    if request.user.role == "Manager":
+        try:
+            task = Task.objects.get(id=id)
+            serializer = TaskSerializer(task, many=False)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    else:
+        try:
+            task = Task.objects.get(id=id, responsible=request.user)
+            serializer = TaskSerializer(task, many=False)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
