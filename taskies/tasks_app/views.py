@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from django.contrib.auth import authenticate, login
+# from django.contrib.auth import authenticate, login
 from jobs.sender import send_to_queue
 # Token imports
 from rest_framework.authtoken.models import Token
@@ -103,7 +103,7 @@ def putUserById(request, id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-# --------------------------------------------------------------------------------------------
+# Token related --------------------------------------------------------------------------------------------
 
 # User Login with Token
 @api_view(['POST'])
@@ -115,7 +115,6 @@ def login(request):
     serializer = UserSerializer(instance=user)             # Serialize user
     return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_200_OK) # Return token and user
 
-
 # User Signin with Token
 @api_view(['POST'])
 def signin(request):
@@ -124,6 +123,8 @@ def signin(request):
         email = serializer.validated_data['email']  # Validate email
         password = make_password(serializer.validated_data['password'])     # Hash the password before saving
         serializer.save(password=password)  # Save the hashed password
+        print(email)
+        send_to_queue(email)
         # token = Token.objects.create(user=serializer.instance) # Create token
         return Response(serializer.data, status=status.HTTP_201_CREATED) # Return token and user
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) # If user is not valid
@@ -162,3 +163,4 @@ def allUserTasks(request):
             return Response(status=status.HTTP_404_NOT_FOUND)
     else:
         return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+    
