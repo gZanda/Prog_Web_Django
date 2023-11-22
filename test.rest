@@ -20,7 +20,7 @@ POST http://127.0.0.1:8000/userLogin/
 Content-Type: application/json
 
 {
-    "email": "zandaWorker@gmail.com",
+    "email": "zandaManager@gmail.com",
     "password": "123"
 }
 
@@ -43,7 +43,7 @@ Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 # Get All Tasks
 GET http://127.0.0.1:8000/tasks/
 Content-Type: application/json
-Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
+Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
 ###
 
@@ -100,3 +100,10 @@ Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
     "approval_status":"Não Avaliada",
     "responsible": 4
 }
+
+###
+
+# Delete User
+DELETE  http://127.0.0.1:8000/deleteUser/1/
+Content-Type: application/json
+Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562

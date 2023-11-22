@@ -14,16 +14,6 @@ from django.shortcuts import get_object_or_404
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated       
     
-# Delete User by id
-@api_view(['DELETE'])
-def deleteUserById(request, id):
-    try:
-        user = User.objects.get(id=id)
-        user.delete()
-        return Response(status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
 # Edit User by id
 @api_view(['PUT'])
 def putUserById(request, id):
@@ -178,6 +168,8 @@ def getUserById(request, id):
     
 # Edit Task by id -> All Users (Managers can edit all, Workers can edit only theirs)
 @api_view(['PUT'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def putTaskById(request, id):
     if request.user.role == "Manager":
         try:
@@ -197,3 +189,18 @@ def putTaskById(request, id):
                 return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        
+# Delete User by id -> Only Managers
+@api_view(['DELETE'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def deleteUserById(request, id):
+    if request.user.role == "Manager":
+        try:
+            user = User.objects.get(id=id)
+            user.delete()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
