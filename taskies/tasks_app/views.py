@@ -26,23 +26,6 @@ def putTaskById(request, id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
-# Get all Users
-@api_view(['GET'])
-def getUsers(request):
-    users = User.objects.all()                                      
-    serializer = UserSerializer(users, many=True)                   
-    return Response(serializer.data, status=status.HTTP_200_OK) 
-
-# Get one User by id
-@api_view(['GET'])
-def getUserById(request, id):
-    try:
-        user = User.objects.get(id=id)
-        serializer = UserSerializer(user, many=False)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
 # Delete User by id
 @api_view(['DELETE'])
 def deleteUserById(request, id):
@@ -104,23 +87,8 @@ def login(request):
 def logout(request):
     request.user.auth_token.delete() # Delete user token
     return Response("{} Logged out".format(request.user.email),status=status.HTTP_200_OK) 
-
-# Get all tasks related to the user logged -> All users 
-@api_view(['GET'])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def allUserTasks(request):
-    try:
-        id = request.user.id
-        print("User id on token: ", id)
-        user = User.objects.get(id=id)
-        tasks = Task.objects.filter(responsible=user)
-        serializer = TaskSerializer(tasks, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
     
-# Get all Tasks -> Only Managers
+# Get all Tasks -> All Users (Managers can see all, Workers can see only theirs)
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -133,7 +101,12 @@ def getTasks(request):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
     else:
-        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+        try:
+            tasks = Task.objects.filter(responsible=request.user)
+            serializer = TaskSerializer(tasks, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
     
 # Create Task -> Only Managers
 @api_view(['POST'])
@@ -184,3 +157,33 @@ def getTaskById(request, id):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        
+# Get all Users -> Only Managers
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getUsers(request):
+    if request.user.role == "Manager":
+        try:
+            users = User.objects.all()
+            serializer = UserSerializer(users, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+    
+# Get one User by id -> Only Managers
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getUserById(request, id):
+    if request.user.role == "Manager":
+        try:
+            user = User.objects.get(id=id)
+            serializer = UserSerializer(user, many=False)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)

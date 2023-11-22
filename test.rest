@@ -47,23 +47,16 @@ Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
 
 ###
 
-# Get all his Tasks
-GET http://127.0.0.1:8000/userTasks/
-Content-Type: application/json
-Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
-
-###
-
 #Create task
 POST http://127.0.0.1:8000/createTask/
 Content-Type: application/json
 Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
 
 {
-    "description":"Fazer Trabalho de Manager",
+    "description":"Fazer algum outro Trabalho",
     "status":"Pendente",
     "approval_status":"Não Avaliada",
-    "responsible": 3
+    "responsible": 1
 }
 
 ###
@@ -76,6 +69,20 @@ Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
 ###
 
 # Get one Task by id
-GET http://127.0.0.1:8000/tasks/2/
+GET http://127.0.0.1:8000/tasks/3/
+Content-Type: application/json
+Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
+
+###
+
+# Get All Users
+GET http://127.0.0.1:8000/users/
+Content-Type: application/json
+Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
+
+###
+
+# Get one User by id
+GET http://127.0.0.1:8000/users/1/
 Content-Type: application/json
 Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
