@@ -17,6 +17,6 @@ urlpatterns = [
     re_path('userSignin/' , views.signin),
     re_path('userTest/' , views.test),
     re_path('userLogout/' , views.logout),
-    re_path('allUserTasks/', views.allUserTasks),
+    re_path('userTasks/', views.allUserTasks),
     
 ]

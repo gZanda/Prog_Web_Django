@@ -6,22 +6,13 @@ from .models import Task, User
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
-# from django.contrib.auth import authenticate, login
 from jobs.sender import send_to_queue
 # Token imports
 from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
 # Authentication imports
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-
-# Get all Tasks
-@api_view(['GET'])  
-def getTasks(request):
-    tasks = Task.objects.all()                                      
-    serializer = TaskSerializer(tasks, many=True)                   
-    return Response(serializer.data, status=status.HTTP_200_OK)         
+from rest_framework.permissions import IsAuthenticated       
 
 # Get one Task by id
 @api_view(['GET'])
@@ -30,25 +21,6 @@ def getTaskById(request, id):
         task = Task.objects.get(id=id)
         serializer = TaskSerializer(task, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-# Create Task
-@api_view(['POST'])
-def postTask(request):
-    serializer = TaskSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
-
-# Delete Task by id
-@api_view(['DELETE'])
-def deleteTaskById(request, id):
-    try:
-        task = Task.objects.get(id=id)
-        task.delete()
-        return Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
@@ -105,7 +77,7 @@ def putUserById(request, id):
 
 # Token related --------------------------------------------------------------------------------------------
 
-# User Login with Token
+# User Login with Token -> All users
 @api_view(['POST'])
 def login(request):
     user = get_object_or_404(User, email=request.data['email']) # Get user by email
@@ -115,7 +87,7 @@ def login(request):
     serializer = UserSerializer(instance=user)             # Serialize user
     return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_200_OK) # Return token and user
 
-# User Signin with Token
+# User Signin (no token here )-> 
 @api_view(['POST'])
 def signin(request):
     serializer = UserSerializer(data=request.data) # Serialize user
@@ -124,8 +96,7 @@ def signin(request):
         password = make_password(serializer.validated_data['password'])     # Hash the password before saving
         serializer.save(password=password)  # Save the hashed password
         print(email)
-        send_to_queue(email)
-        # token = Token.objects.create(user=serializer.instance) # Create token
+        send_to_queue(email) # Send email using Rabit
         return Response(serializer.data, status=status.HTTP_201_CREATED) # Return token and user
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) # If user is not valid
 
@@ -136,7 +107,7 @@ def signin(request):
 def test(request):
     return Response("Valid token for {}".format(request.user.email))
 
-# User logout with Token
+# User logout with Token -> All users
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication]) # Check if token is valid
 @permission_classes([IsAuthenticated])  # Check if user is authenticated
@@ -144,19 +115,29 @@ def logout(request):
     request.user.auth_token.delete() # Delete user token
     return Response("{} Logged out".format(request.user.email),status=status.HTTP_200_OK) 
 
-# Get all tasks related to a user by his id that comes on token
+# Get all tasks related to the user logged -> All users 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def allUserTasks(request):
-    # Check if User is from role "Worker"
+    try:
+        id = request.user.id
+        print("User id on token: ", id)
+        user = User.objects.get(id=id)
+        tasks = Task.objects.filter(responsible=user)
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+# Get all Tasks -> Only Managers
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def getTasks(request):
     if request.user.role == "Manager":
         try:
-            # Get the user id from token
-            id = request.user.id
-            print("User id on token: ", id)
-            user = User.objects.get(id=id)
-            tasks = Task.objects.filter(responsible=user)
+            tasks = Task.objects.all()
             serializer = TaskSerializer(tasks, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
@@ -164,3 +145,32 @@ def allUserTasks(request):
     else:
         return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
     
+# Create Task -> Only Managers
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def postTask(request):
+    if request.user.role == "Manager":
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+    
+# Delete Task by id -> Only Managers
+@api_view(['DELETE'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def deleteTaskById(request, id):
+    if request.user.role == "Manager":
+        try:
+            task = Task.objects.get(id=id)
+            task.delete()
+            return Response("Task Deleted",status=status.HTTP_200_OK)
+        except:
+            return Response("Task not Found",status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
