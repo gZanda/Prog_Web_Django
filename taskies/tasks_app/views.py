@@ -14,18 +14,6 @@ from django.shortcuts import get_object_or_404
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated       
     
-# Edit Task by id
-@api_view(['PUT'])
-def putTaskById(request, id):
-    try:
-        task = Task.objects.get(id=id)
-        serializer = TaskSerializer(instance=task, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
 # Delete User by id
 @api_view(['DELETE'])
 def deleteUserById(request, id):
@@ -48,9 +36,7 @@ def putUserById(request, id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-# Token related --------------------------------------------------------------------------------------------
-
-# User Signin (no token here )-> 
+# User Signin (no token here )
 @api_view(['POST'])
 def signin(request):
     serializer = UserSerializer(data=request.data) # Serialize user
@@ -62,6 +48,8 @@ def signin(request):
         send_to_queue(email) # Send email using Rabit
         return Response(serializer.data, status=status.HTTP_201_CREATED) # Return token and user
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) # If user is not valid
+
+# Token related --------------------------------------------------------------------------------------------
 
 # User Token Test
 @api_view(['GET'])
@@ -187,3 +175,25 @@ def getUserById(request, id):
             return Response(status=status.HTTP_404_NOT_FOUND)
     else:
         return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+    
+# Edit Task by id -> All Users (Managers can edit all, Workers can edit only theirs)
+@api_view(['PUT'])
+def putTaskById(request, id):
+    if request.user.role == "Manager":
+        try:
+            task = Task.objects.get(id=id)
+            serializer = TaskSerializer(instance=task, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    else:
+        try:
+            task = Task.objects.get(id=id, responsible=request.user)
+            serializer = TaskSerializer(instance=task, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)

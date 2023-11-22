@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
     "username": "Zanda Worker",
-    "email": "zandaWorker@gmail.com",
+    "email": "zandaManager@gmail.com",
     "password": "123",
     "role": "Worker"
 }
@@ -29,7 +29,7 @@ Content-Type: application/json
 # Test user token authentication
 GET http://127.0.0.1:8000/userTest/
 Content-Type: application/json
-Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
+Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
 ###
 
@@ -50,13 +50,13 @@ Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
 #Create task
 POST http://127.0.0.1:8000/createTask/
 Content-Type: application/json
-Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
+Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
 {
     "description":"Fazer algum outro Trabalho",
     "status":"Pendente",
     "approval_status":"Não Avaliada",
-    "responsible": 1
+    "responsible": 4
 }
 
 ###
@@ -64,25 +64,39 @@ Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
 # Delete Task
 DELETE http://127.0.0.1:8000/deleteTask/2/
 Content-Type: application/json
-Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
+Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
 ###
 
 # Get one Task by id
 GET http://127.0.0.1:8000/tasks/3/
 Content-Type: application/json
-Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
+Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
 ###
 
 # Get All Users
 GET http://127.0.0.1:8000/users/
 Content-Type: application/json
-Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
+Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
 ###
 
 # Get one User by id
 GET http://127.0.0.1:8000/users/1/
 Content-Type: application/json
+Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+
+###
+
+# Edit Task
+PUT http://127.0.0.1:8000/editTask/7/
+Content-Type: application/json
 Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
+
+{
+    "description":"Agora sim Alterada por Worker",
+    "status":"Pendente",
+    "approval_status":"Não Avaliada",
+    "responsible": 4
+}
