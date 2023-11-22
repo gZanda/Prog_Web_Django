@@ -3,7 +3,7 @@
 # User faz logout -> Token é deletado
 
 # Create User
-POST http://127.0.0.1:8000/userSignin/
+POST http://127.0.0.1:8000/signin/
 Content-Type: application/json
 Authorization: Token 26c2cb184b8ac02b2776baefd00e1c82e335d1d4
 
@@ -17,7 +17,7 @@ Authorization: Token 26c2cb184b8ac02b2776baefd00e1c82e335d1d4
 ###
 
 # Login User with Token
-POST http://127.0.0.1:8000/userLogin/
+POST http://127.0.0.1:8000/login/
 Content-Type: application/json
 
 {
@@ -28,14 +28,14 @@ Content-Type: application/json
 ###
 
 # Test user token authentication
-GET http://127.0.0.1:8000/userTest/
+GET http://127.0.0.1:8000/test/
 Content-Type: application/json
 Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
 ###
 
 # Logout user
-GET http://127.0.0.1:8000/userLogout/
+GET http://127.0.0.1:8000/logout/
 Content-Type: application/json
 Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
@@ -43,6 +43,13 @@ Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
 # Get All Tasks
 GET http://127.0.0.1:8000/tasks/
+Content-Type: application/json
+Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+
+###
+
+# Get one Task by id
+GET http://127.0.0.1:8000/tasks/3/
 Content-Type: application/json
 Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
@@ -64,13 +71,6 @@ Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
 # Delete Task
 DELETE http://127.0.0.1:8000/deleteTask/2/
-Content-Type: application/json
-Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
-
-###
-
-# Get one Task by id
-GET http://127.0.0.1:8000/tasks/3/
 Content-Type: application/json
 Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 
