@@ -12,9 +12,8 @@ urlpatterns = [
     path('users/<int:id>/', views.getUserById, name='userById'),                # Get one User - Manager
     path('deleteUser/<int:id>/', views.deleteUserById, name='deleteUserById'),  # Delete User - Manager
 
-    re_path('login/' , views.login),                                        # Login - All
-    re_path('signin/' , views.signin),                                      # Signin - Managers
-    re_path('test/' , views.test),              # Só teste do Token
-    re_path('logout/' , views.logout),                                      # Logout - All
-    
+    re_path('userLogin/' , views.login),                                        # Login - All
+    re_path('userSignin/' , views.signin),                                      # Signin - Managers
+    re_path('userTest/' , views.test),              # Só teste do Token
+    re_path('userLogout/' , views.logout),                                      # Logout - All   
 ]

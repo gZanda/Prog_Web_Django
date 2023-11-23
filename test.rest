@@ -5,11 +5,11 @@
 # Create User
 POST http://127.0.0.1:8000/signin/
 Content-Type: application/json
-Authorization: Token 26c2cb184b8ac02b2776baefd00e1c82e335d1d4
+Authorization: Token 784d51005eb5278bd60891c76ac9750bf23f5ce4
 
 {
-    "username": "Zanda Worker 3",
-    "email": "zandaWorker3@gmail.com",
+    "username": "Zanda Worker",
+    "email": "zandaWorker@gmail.com",
     "password": "123",
     "role": "Worker"
 }
