@@ -27,21 +27,16 @@ def test(request):
 
 # User Signin -> Only Managers
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, TokenAuthentication]) # Check if token is valid
-@permission_classes([IsAuthenticated]) # Check if user is authenticated
 def signin(request):
-    if request.user.role == "Manager": # Check if user is a manager
-        serializer = UserSerializer(data=request.data) # Serialize user
-        if serializer.is_valid():                       # Check if user json data is valid
-            email = serializer.validated_data['email']  # Validate email
-            password = make_password(serializer.validated_data['password'])     # Hash the password before saving
-            serializer.save(password=password)  # Save the hashed password
-            print(email)
-            send_to_queue(email) # Send email using Rabit
-            return Response(serializer.data, status=status.HTTP_201_CREATED) # Return user info
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) # If user is not valid
-    else:
-        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+    serializer = UserSerializer(data=request.data) # Serialize user
+    if serializer.is_valid():                       # Check if user json data is valid
+        email = serializer.validated_data['email']  # Validate email
+        password = make_password(serializer.validated_data['password'])     # Hash the password before saving
+        serializer.save(password=password)  # Save the hashed password
+        print(email)
+        send_to_queue(email) # Send email using Rabit
+        return Response(serializer.data, status=status.HTTP_201_CREATED) # Return user info
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) # If user is not valid
     
 # Create Task -> Only Managers
 @api_view(['POST'])

@@ -3,68 +3,67 @@
 # User faz logout -> Token é deletado
 
 # Create User
-POST http://127.0.0.1:8000/signin/
+POST http://127.0.0.1:8000/userSignin/
 Content-Type: application/json
-Authorization: Token 784d51005eb5278bd60891c76ac9750bf23f5ce4
 
 {
-    "username": "Zanda Worker",
-    "email": "zandaWorker@gmail.com",
+    "username": "Otavio",
+    "email": "otavio.rodf@gmail.com",
     "password": "123",
-    "role": "Worker"
+    "role": "Manager"
 }
 
 ###
 
 # Login User with Token
-POST http://127.0.0.1:8000/login/
+POST http://127.0.0.1:8000/userLogin/
 Content-Type: application/json
 
 {
-    "email": "zandaWorker2@gmail.com",
+    "email": "otavio.rodf@gmail.com",
     "password": "123"
 }
 
 ###
 
 # Test user token authentication
-GET http://127.0.0.1:8000/test/
+GET http://127.0.0.1:8000/userTest/
 Content-Type: application/json
-Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+Authorization: Token fe8687af7445dfaae983f7de4da6a682fcf7f8f2
 
 ###
 
 # Logout user
-GET http://127.0.0.1:8000/logout/
+GET http://127.0.0.1:8000/userLogout/
 Content-Type: application/json
-Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+Authorization: Token fe8687af7445dfaae983f7de4da6a682fcf7f8f2
 
 ### 
 
 # Get All Tasks
 GET http://127.0.0.1:8000/tasks/
 Content-Type: application/json
-Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+Authorization: Token fe8687af7445dfaae983f7de4da6a682fcf7f8f2
 
 ###
 
 # Get one Task by id
-GET http://127.0.0.1:8000/tasks/3/
+GET http://127.0.0.1:8000/tasks/2/
 Content-Type: application/json
-Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+Authorization: Token fe8687af7445dfaae983f7de4da6a682fcf7f8f2
 
 ###
 
 #Create task
 POST http://127.0.0.1:8000/createTask/
 Content-Type: application/json
-Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
+Authorization: Token fe8687af7445dfaae983f7de4da6a682fcf7f8f2
 
 {
-    "description":"Fazer algum outro Trabalho",
+    "description":"Fazer Trabalho",
     "status":"Pendente",
     "approval_status":"Não Avaliada",
-    "responsible": 4
+    "responsible": 2
 }
 
 ###
@@ -91,15 +90,15 @@ Authorization: Token d11cdb5ee4ad592edd6e8e2c3781ac2beecbb562
 ###
 
 # Edit Task
-PUT http://127.0.0.1:8000/editTask/7/
+PUT http://127.0.0.1:8000/editTask/2/
 Content-Type: application/json
-Authorization: Token 848acfe4ce403131537a1ba69756e6bbd1db10e7
+Authorization: Token fe8687af7445dfaae983f7de4da6a682fcf7f8f2
 
 {
     "description":"Agora sim Alterada por Worker",
     "status":"Pendente",
-    "approval_status":"Não Avaliada",
-    "responsible": 4
+    "approval_status":"Aprovada",
+    "responsible": 2
 }
 
 ###
