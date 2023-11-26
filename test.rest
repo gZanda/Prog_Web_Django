@@ -2,13 +2,13 @@
 # User faz login -> Token é gerado
 # User faz logout -> Token é deletado
 
-# Create User
+# Create User - Mesmo se colocar "Manager" será criado como Worker
 POST http://127.0.0.1:8000/userSignin/
 Content-Type: application/json
 
 {
-    "username": "Zanda5",
-    "email": "zanda5@gmail.com",
+    "username": "Zanda6",
+    "email": "zanda6@gmail.com",
     "password": "123",
     "role": "Manager"
 }
@@ -20,7 +20,7 @@ POST http://127.0.0.1:8000/userLogin/
 Content-Type: application/json
 
 {
-    "email": "zanda5@gmail.com",
+    "email": "zanda6@gmail.com",
     "password": "123"
 }
 
@@ -29,14 +29,14 @@ Content-Type: application/json
 # Test user token authentication
 GET http://127.0.0.1:8000/userTest/
 Content-Type: application/json
-Authorization: Token fe8687af7445dfaae983f7de4da6a682fcf7f8f2
+Authorization: Token d848ff94170c5c45d645427112dc54b2848f1eb8
 
 ###
 
 # Logout user
 GET http://127.0.0.1:8000/userLogout/
 Content-Type: application/json
-Authorization: Token fe8687af7445dfaae983f7de4da6a682fcf7f8f2
+Authorization: Token d848ff94170c5c45d645427112dc54b2848f1eb8
 
 ### 
 
