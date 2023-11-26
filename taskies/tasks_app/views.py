@@ -51,7 +51,7 @@ def postTask(request):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+        return Response("User is not a Manager", status=status.HTTP_403_FORBIDDEN)
 
 # Delete Task by id -> Only Managers
 @api_view(['DELETE'])
@@ -66,7 +66,7 @@ def deleteTaskById(request, id):
         except:
             return Response("Task not Found",status=status.HTTP_404_NOT_FOUND)
     else:
-        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+        return Response("User is not a Manager", status=status.HTTP_403_FORBIDDEN)
     
 # Get all Users -> Only Managers
 @api_view(['GET'])
@@ -81,7 +81,7 @@ def getUsers(request):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
     else:
-        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+        return Response("User is not a Manager", status=status.HTTP_403_FORBIDDEN)
     
 # Get one User by id -> Only Managers
 @api_view(['GET'])
@@ -96,7 +96,7 @@ def getUserById(request, id):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
     else:
-        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+        return Response("User is not a Manager", status=status.HTTP_403_FORBIDDEN)
     
 # Delete User by id -> Only Managers
 @api_view(['DELETE'])
@@ -111,7 +111,7 @@ def deleteUserById(request, id):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
     else:
-        return Response("User is not a Manager", status=status.HTTP_404_NOT_FOUND)
+        return Response("User is not a Manager", status=status.HTTP_403_FORBIDDEN)
     
 # All Users -----------------------------------------------------------------------------------------
 
