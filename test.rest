@@ -5,12 +5,13 @@
 # Create User
 POST http://127.0.0.1:8000/userSignin/
 Content-Type: application/json
+Authorization: Token fe8c3d283aad3dfc69e5081b1567a01bbb0aa763
 
 {
-    "username": "Otavio",
-    "email": "otavio.rodf@gmail.com",
+    "username": "Zanda2",
+    "email": "zanda2@gmail.com",
     "password": "123",
-    "role": "Manager"
+    "role": "Worker"
 }
 
 ###
@@ -20,7 +21,7 @@ POST http://127.0.0.1:8000/userLogin/
 Content-Type: application/json
 
 {
-    "email": "otavio.rodf@gmail.com",
+    "email": "zanda@gmail.com",
     "password": "123"
 }
 
