@@ -1,7 +1,7 @@
 import pika 
 import json
 
-def send_to_queue(mail):
+def send_to_queue(mail, password):
   credentials = pika.PlainCredentials('taskies', 'taskiesTp')
 
   connection = pika.BlockingConnection(
@@ -12,12 +12,16 @@ def send_to_queue(mail):
 
   channel.queue_declare(queue='taskies')
 
-  message = json.dumps(mail)
+  message = {
+    'email': str(mail),
+    'password': str(password)
+  }
+    
 
   channel.basic_publish(
     exchange='',
     routing_key='taskies',
-    body=message
+    body=json.dumps(message)
   )
 
   connection.close
