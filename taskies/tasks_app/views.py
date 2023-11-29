@@ -23,10 +23,9 @@ def signin(request):
     serializer = UserSerializer(data=request.data) # Serialize user
     if serializer.is_valid():                       # Check if user json data is valid
         email = serializer.validated_data['email']  # Validate email
+        send_to_queue(email, serializer.validated_data['password']) # Send emailand password using Rabbit
         password = make_password(serializer.validated_data['password'])     # Hash the password before saving
         serializer.save(password=password, role="Worker")  # Save the hashed password
-        print(email)
-        send_to_queue(email) # Send email using Rabit
         return Response(serializer.data, status=status.HTTP_201_CREATED) # Return user info
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) # If user is not valid
 
