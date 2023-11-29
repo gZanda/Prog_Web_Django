@@ -6,7 +6,7 @@ def main():
   credentials = pika.PlainCredentials('taskies', 'taskiesTp')
 
   connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost', credentials=credentials)
+    pika.ConnectionParameters(host='rabbitmq', credentials=credentials)
   )
 
   channel = connection.channel()

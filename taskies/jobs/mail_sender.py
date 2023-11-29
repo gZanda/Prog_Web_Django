@@ -23,14 +23,15 @@ def send_to_gmail(message):
       senha: {password}
   """
 
-  msg.attach(MIMEText(body, 'plain'))
+  msg.attach(MIMEText(body, 'plain', 'utf-8'))
 
-  server = smtplib.SMTP("smtp.gmail.com", 587)
+  try:
+    server = smtplib.SMTP("smtp.gmail.com", 587)
 
-  server.starttls()
+    server.starttls()
 
-  server.login(EMAIL, "qnowmvdekonxhrln")
+    server.login(EMAIL, "qnowmvdekonxhrln")
 
-  server.sendmail(EMAIL, receiver_email, msg.as_string())
-
-  server.quit()
+    server.sendmail(EMAIL, receiver_email, msg.as_string())
+  finally:
+    server.quit()
