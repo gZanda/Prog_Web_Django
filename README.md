@@ -22,10 +22,16 @@ pip install django-cors-headers
 pip install pika
 ```
 
+### 📌 Inicialize os serviços do Docker:
+
+```bash
+docker compose build --no-cache
+
+docker compose up -d
+```
+
 ### 📌 Vá para o diretório da aplicação e rode o servidor:
 
 ```bash
-cd taskies
-
 python3 manage.py runserver
 ```
